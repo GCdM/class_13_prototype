@@ -9,6 +9,6 @@ class PromptController < ApplicationController
     end
 
     def upload
-        byebug
+        
     end
 end
