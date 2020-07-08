@@ -36,24 +36,31 @@ export default class extends Controller {
 
   createAudioPlayer = () => {
     const blob = new Blob(this.chunks, { 'type' : 'audio/ogg; codecs=opus' })
-    const audioURL = window.URL.createObjectURL(blob)
+    const formData = new FormData()
+    formData.append('audio', blob)
+
     const csrfToken = document.querySelector('meta[name="csrf-token"]').content
-        
+    
     fetch('http://localhost:3000/answer', {
       method: 'POST',
       headers: {
-        'Content-Type': 'audio/ogg',
+        // 'Content-Type': 'multipart/formdata',
         'X-CSRF-Token': csrfToken,
       },
-      body: blob,
+      body: formData,
     })
-    // .then( r => {debugger} )
-    
-    const audio = document.createElement('audio')
-    audio.controls = true
-    this.playerTarget.append(audio)
-
-    audio.src = audioURL
+    .then( resp => {
+      debugger
+      // if (resp.ok) window.location = "localhost:3000/dashboard"
+      return resp.json()
+    })
+    .then( answer => {
+      const audioPlayer = document.createElement('audio')
+      audioPlayer.controls = true
+      audioPlayer.src = answer.audioUrl
+      
+      this.playerTarget.append(audioPlayer)
+    })
   }
 
   get audioAvailable() {

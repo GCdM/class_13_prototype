@@ -1,0 +1,5 @@
+<h1>Dashboard</h1>
+
+<% @answers.each do |answer| %>
+    <audio controls src=<%= url_for(answer.audio) %> ></audio>
+<% end %>
