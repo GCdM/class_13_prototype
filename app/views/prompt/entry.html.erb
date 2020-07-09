@@ -1,9 +1,11 @@
 <div id="prompt-entry">
-    <h3>Please press <span>Start</span> below to begin answering today's prompt</h3>
+    <h4>Hello <%= @participant.name %>!</h4>
+    <h4>You're about to answer <%= @prompt.content %></h4>
+    <h3>Press <span>Start</span> below to begin answering today's prompt</h3>
     <p><i>NOTE: Once started, you will not be able to pause the recording</i></p>
 
     <div>
-        <a href="/answer">
+        <a href="/answer/<%= @answer.id %>">
             <button>Start</button>
         </a>
     </div>
