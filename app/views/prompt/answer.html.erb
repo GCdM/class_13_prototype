@@ -1,8 +1,11 @@
-<div id="prompt-answer"
-  data-controller="prompt">
+<div 
+  id="prompt-answer"
+  data-controller="prompt"
+  data-prompt-remaining-time=<%= @prompt.duration %>
+>
   <h1>Question:</h1>
-  <h4>( 01:27 )</h4>
-  <h3>Thought provoking question goes here?</h3>
+  <h4>( <span data-target="prompt.timer">0:00</span> )</h4>
+  <h3><%= @prompt.content %></h3>
   <button data-action="prompt#handleSubmit">
     Submit
   </button>

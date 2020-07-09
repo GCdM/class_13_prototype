@@ -1,20 +1,35 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  static targets = [ "player" ]
+  static targets = [ "player", "timer" ]
 
   mediaRecorder = null
   chunks = []
 
   connect() {
+    this.updateTimerDisplay()
+    
     if (this.audioAvailable) {
-      this.requestAudioRecording()
+      this.requestMicrophoneAccess()
     } else {
       console.error("getUserMedia not supported")
     }
   }
 
-  requestAudioRecording() {
+  updateTimerDisplay() {
+    this.timerTarget.textContent = this.formatRemainingTime()
+  }
+
+  formatRemainingTime() {
+    const remainingTime = parseInt(this.data.get("remainingTime"))
+    const minutes = Math.floor( remainingTime / 60 ).toString()
+    const seconds = (remainingTime % 60).toString()
+    const paddedSeconds = seconds.padStart(2, '0')
+    
+    return `${minutes}:${paddedSeconds}`
+  }
+
+  requestMicrophoneAccess() {
     navigator.mediaDevices.getUserMedia({ audio: true })
     .then( stream => {
       this.mediaRecorder = new MediaRecorder(stream)
@@ -50,7 +65,6 @@ export default class extends Controller {
       body: formData,
     })
     .then( resp => {
-      debugger
       // if (resp.ok) window.location = "localhost:3000/dashboard"
       return resp.json()
     })
@@ -61,6 +75,14 @@ export default class extends Controller {
       
       this.playerTarget.append(audioPlayer)
     })
+  }
+
+  get remainingTime() {
+    return parseInt(this.data.get("remainingTime"))
+  }
+
+  set remainingTime(newTime) {
+    this.data.set("remainingTime", newTime)
   }
 
   get audioAvailable() {
