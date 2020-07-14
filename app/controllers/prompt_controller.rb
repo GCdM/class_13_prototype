@@ -4,7 +4,7 @@ class PromptController < ApplicationController
         @prompt = Prompt.encoded_find(params[:encoded_prompt_id])
         @participant = Participant.encoded_find(params[:encoded_participant_id])
         @answer = Answer.find_or_create_by(prompt: @prompt, participant: @participant)
-        byebug
+
         if @answer.audio.attached?
             render :already_answered
         else
@@ -24,9 +24,5 @@ class PromptController < ApplicationController
         answer.audio.attach(params[:audio])
         
         render json: { audioUrl: url_for(answer.audio) }
-    end
-
-    def dashboard
-        @answers = Answer.all
     end
 end

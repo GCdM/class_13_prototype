@@ -6,5 +6,9 @@ Rails.application.routes.draw do
   get '/answer/:encoded_id', to: 'prompt#answer', as: 'answer'
   post '/answer', to: 'prompt#upload'
 
-  get '/dashboard', to: 'prompt#dashboard', as: 'dashboard'
+  namespace :admin do
+    get '/dashboard', to: 'dashboard#dashboard', as: 'dashboard'
+  end
+
+  get '/unauthorised', to: 'application#unauthorised', as: 'unauthorised'
 end
