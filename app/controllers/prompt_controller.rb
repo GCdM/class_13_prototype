@@ -1,10 +1,10 @@
 class PromptController < ApplicationController
 
     def entry
-        @prompt = Prompt.find(params[:prompt_id])
-        @participant = Participant.find(params[:id])
+        @prompt = Prompt.encoded_find(params[:encoded_prompt_id])
+        @participant = Participant.encoded_find(params[:encoded_participant_id])
         @answer = Answer.find_or_create_by(prompt: @prompt, participant: @participant)
-
+        byebug
         if @answer.audio.attached?
             render :already_answered
         else
@@ -13,7 +13,7 @@ class PromptController < ApplicationController
     end
 
     def answer
-        @answer = Answer.find(params[:id])
+        @answer = Answer.encoded_find(params[:encoded_id])
         @prompt = @answer.prompt
     end
 
@@ -22,10 +22,8 @@ class PromptController < ApplicationController
         prompt = Prompt.first
         answer = Answer.create(participant: participant, prompt: prompt)
         answer.audio.attach(params[:audio])
-        # audio_binary = answer.audio.download
         
         render json: { audioUrl: url_for(answer.audio) }
-        # redirect_to dashboard_path
     end
 
     def dashboard
